@@ -1,0 +1,7 @@
+{
+  "name": "minerva",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
