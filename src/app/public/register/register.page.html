@@ -1,0 +1,55 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-back-button defaultHref="/login"></ion-back-button>
+		</ion-buttons>
+		<ion-title>Register</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<form novalidate>
+		<ion-row>
+			<ion-col size="6">
+				<ion-item>
+					<ion-label position="floating"><ion-icon name="person-outline"></ion-icon> Name </ion-label>
+					<ion-input type="text"></ion-input>
+				</ion-item>
+			</ion-col>
+			<ion-col size="6">
+				<ion-item>
+					<ion-label position="floating"> Lastname </ion-label>
+					<ion-input type="text"></ion-input>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+
+		<ion-item>
+			<ion-label><ion-icon slot="start" name="calendar"></ion-icon> Date of birth</ion-label>
+			<ion-datetime display-format="DD.MM.YYYY" (ionChange)="getDate($event)"></ion-datetime>
+		</ion-item>
+
+		<ion-item>
+			<ion-label position="floating"><ion-icon slot="start" name="mail-outline"></ion-icon> E-Mail </ion-label>
+			<ion-input type="text"></ion-input>
+		</ion-item>
+
+		<ion-item>
+			<ion-label position="floating"><ion-icon name="lock-closed-outline"></ion-icon> Password</ion-label>
+			<ion-input type="password"></ion-input>
+		</ion-item>
+
+		<ion-item>
+			<ion-label position="floating"><ion-icon name="lock-closed-outline"></ion-icon> Confirm Password</ion-label>
+			<ion-input type="password"></ion-input>
+		</ion-item>
+
+		<ion-row>
+			<ion-col size="12">
+				<ion-button expand="block" inline color="primary" type="submit">
+					Register
+				</ion-button>
+			</ion-col>
+		</ion-row>
+	</form>
+</ion-content>
