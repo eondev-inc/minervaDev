@@ -19,7 +19,7 @@ export class AuthenticationService {
 
 	/**
 	 * Metodo para crear el inicio de sesión del usuario y obtener las credenciales
-	 * @returns Promise<firebase.auth.UserCredential
+	 * @returns Promise<boolean>
 	 * @param user: UserLoginModel
 	 */
 	public async userLogin(user: UserLoginModel): Promise<boolean> {
