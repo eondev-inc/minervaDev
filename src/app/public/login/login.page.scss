@@ -1,7 +1,11 @@
 .facebook {
-	--ion-background-color: #3b5998;
+	--ion-background-color: #3b5998 !important;
 }
 
 .twitter {
-	--ion-background-color: #76c5f5;
+	--ion-background-color: #76c5f5 !important;
+}
+
+.shrink {
+	height: 200px;
 }

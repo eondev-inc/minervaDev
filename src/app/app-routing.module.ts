@@ -4,7 +4,7 @@ import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
 	{
-		path: '',
+		path: '**',
 		redirectTo: 'login',
 		pathMatch: 'full',
 	},
@@ -18,7 +18,12 @@ const routes: Routes = [
 	},
 	{
 		path: 'dashboard',
+		canActivate: [AuthGuard],
 		loadChildren: () => import('./members/dashboard/dashboard.module').then((m) => m.DashboardPageModule),
+	},
+	{
+		path: 'recover',
+		loadChildren: () => import('./public/recover/recover.module').then((m) => m.RecoverPageModule),
 	},
 ];
 

@@ -8,42 +8,92 @@
 </ion-header>
 
 <ion-content>
-	<form novalidate>
+	<form [formGroup]="registerForm" (ngSubmit)="submitForm()" novalidate>
 		<ion-row>
 			<ion-col size="6">
 				<ion-item>
 					<ion-label position="floating"><ion-icon name="person-outline"></ion-icon> Name </ion-label>
-					<ion-input type="text"></ion-input>
+					<ion-input type="text" formControlName="name" required></ion-input>
 				</ion-item>
+				<span class="error ion-padding" *ngIf="nameInvalid">
+					<ion-text color="danger">
+						Required
+					</ion-text>
+				</span>
 			</ion-col>
 			<ion-col size="6">
 				<ion-item>
-					<ion-label position="floating"> Lastname </ion-label>
-					<ion-input type="text"></ion-input>
+					<ion-label position="floating"><ion-icon name="person-outline"></ion-icon> Lastname </ion-label>
+					<ion-input type="text" formControlName="lastName" required></ion-input>
 				</ion-item>
+				<span class="error ion-padding" *ngIf="lastNameInvalid">
+					<ion-text color="danger">
+						Required
+					</ion-text>
+				</span>
 			</ion-col>
 		</ion-row>
 
 		<ion-item>
 			<ion-label><ion-icon slot="start" name="calendar"></ion-icon> Date of birth</ion-label>
-			<ion-datetime display-format="DD.MM.YYYY" (ionChange)="getDate($event)"></ion-datetime>
+			<ion-datetime
+				(ionChange)="getDate($event)"
+				formControlName="dob"
+				required
+				[value]="defaultDate"
+			></ion-datetime>
 		</ion-item>
+
+		<ion-radio-group lines="full" formControlName="gender" required>
+			<ion-list-header>
+				<ion-label>Gender</ion-label>
+			</ion-list-header>
+
+			<ion-item>
+				<ion-label>Male</ion-label>
+				<ion-radio slot="start" value="male"></ion-radio>
+			</ion-item>
+
+			<ion-item>
+				<ion-label>Female</ion-label>
+				<ion-radio slot="start" value="female"></ion-radio>
+			</ion-item>
+		</ion-radio-group>
+		<span class="error ion-padding" *ngIf="genderInvalid">
+			<ion-text color="danger">
+				Required
+			</ion-text>
+		</span>
 
 		<ion-item>
 			<ion-label position="floating"><ion-icon slot="start" name="mail-outline"></ion-icon> E-Mail </ion-label>
-			<ion-input type="text"></ion-input>
+			<ion-input type="text" formControlName="email" required> </ion-input>
 		</ion-item>
+		<span class="error ion-padding" *ngIf="emailInvalid">
+			<ion-text color="danger">
+				Email invalid or already used
+			</ion-text>
+		</span>
 
 		<ion-item>
 			<ion-label position="floating"><ion-icon name="lock-closed-outline"></ion-icon> Password</ion-label>
-			<ion-input type="password"></ion-input>
+			<ion-input type="password" formControlName="password" required></ion-input>
 		</ion-item>
+		<span class="error ion-padding" *ngIf="passwordInvalid">
+			<ion-text color="danger">
+				Password must be between 6 and 8 characters
+			</ion-text>
+		</span>
 
 		<ion-item>
 			<ion-label position="floating"><ion-icon name="lock-closed-outline"></ion-icon> Confirm Password</ion-label>
-			<ion-input type="password"></ion-input>
+			<ion-input type="password" formControlName="confirmPassword" required></ion-input>
 		</ion-item>
-
+		<span class="error ion-padding" *ngIf="confirmPassInvalid">
+			<ion-text color="danger">
+				Password are not equals
+			</ion-text>
+		</span>
 		<ion-row>
 			<ion-col size="12">
 				<ion-button expand="block" inline color="primary" type="submit">

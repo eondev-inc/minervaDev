@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { UserLoginModel } from 'src/app/models/user.login.model';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
 	selector: 'app-login',
@@ -7,7 +12,69 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginPage implements OnInit {
 	logo: string = '../../assets/img/minerva_login.png';
-	constructor() {}
+	user: UserLoginModel;
+	invalid: boolean;
+	constructor(
+		private auth: AuthenticationService,
+		private route: Router,
+		public loadingController: LoadingController
+	) {
+		this.user = new UserLoginModel();
+		this.invalid = false;
+	}
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.auth.isAuthenticated().then((res) => {
+			if (res) {
+				this.route.navigateByUrl('/dashboard');
+			}
+		});
+	}
+
+	/**
+	 *  Login user en la app
+	 * @param form
+	 */
+	async onLoginUser(form: NgForm) {
+		const loading = await this.loadingController.create({
+			message: 'Loading...',
+			spinner: 'bubbles',
+		});
+		await loading.present();
+
+		if (form.invalid) {
+			this.invalid = true;
+			await loading.dismiss();
+			return;
+		}
+
+		this.auth
+			.userLogin(this.user)
+			.then(async (result) => {
+				await loading.dismiss();
+				if (result) {
+					this.route.navigateByUrl('/dashboard');
+				} else {
+					await loading.dismiss();
+				}
+			})
+			.catch(async (error) => {
+				console.error(error);
+				await loading.dismiss();
+			});
+	}
+
+	onLoginFacebook() {
+		try {
+			this.auth.userLoginFacebook();
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	onLoginTwitter() {
+		try {
+			this.auth.userLoginTwitter();
+		} catch (error) {}
+	}
 }
