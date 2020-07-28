@@ -3,7 +3,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { UserLoginModel } from 'src/app/models/user.login.model';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, AlertController } from '@ionic/angular';
 
 @Component({
 	selector: 'app-login',
@@ -17,7 +17,8 @@ export class LoginPage implements OnInit {
 	constructor(
 		private auth: AuthenticationService,
 		private route: Router,
-		public loadingController: LoadingController
+		public loadingController: LoadingController,
+		private alertController: AlertController
 	) {
 		this.user = new UserLoginModel();
 		this.invalid = false;
@@ -25,6 +26,7 @@ export class LoginPage implements OnInit {
 
 	ngOnInit() {
 		this.auth.isAuthenticated().then((res) => {
+			console.log(res);
 			if (res) {
 				this.route.navigateByUrl('/dashboard');
 			}
@@ -39,6 +41,11 @@ export class LoginPage implements OnInit {
 		const loading = await this.loadingController.create({
 			message: 'Loading...',
 			spinner: 'bubbles',
+		});
+		const alertLoading = await this.alertController.create({
+			header: 'Atención!',
+			message: 'Correo no verificado o contraseña no válida...',
+			buttons: ['OK'],
 		});
 		await loading.present();
 
@@ -55,11 +62,12 @@ export class LoginPage implements OnInit {
 				if (result) {
 					this.route.navigateByUrl('/dashboard');
 				} else {
-					await loading.dismiss();
+					await alertLoading.present();
 				}
 			})
 			.catch(async (error) => {
 				console.error(error);
+				await alertLoading.present();
 				await loading.dismiss();
 			});
 	}

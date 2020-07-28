@@ -127,15 +127,10 @@ export class RegisterPage implements OnInit {
 		);
 	}
 
+	/**
+	 * Método que escucha los cambios dentro del formulario para verificar la existencia del correo
+	 */
 	buildListener() {
-		// this.registerForm.valueChanges.subscribe((value) => {
-		// 	console.log(value);
-		// });
-
-		// this.registerForm.statusChanges.subscribe((status) => {
-		// 	console.log(status);
-		// });
-
 		this.registerForm.get('email').statusChanges.subscribe((status) => {
 			if (status !== 'PENDING') {
 				this.checkingEmail = false;

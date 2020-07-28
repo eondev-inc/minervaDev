@@ -3,15 +3,14 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { UserRegisterModel } from '../models/user.register.model';
 import * as moment from 'moment-timezone';
+import { UsersService } from './users.service';
+import { Users } from '../models/users.model';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class RegistrationService {
-	private usersCollection: AngularFirestoreCollection<UserRegisterModel>;
-	constructor(private fireAuth: AngularFireAuth, private readonly fireStorage: AngularFirestore) {
-		this.usersCollection = fireStorage.collection<UserRegisterModel>('users');
-	}
+	constructor(private fireAuth: AngularFireAuth, private userService: UsersService) {}
 
 	public registerUserWithCredentials(user: UserRegisterModel) {
 		this.fireAuth
@@ -25,6 +24,8 @@ export class RegistrationService {
 					user.createdAt = moment(new Date()).format('YYYY-MM-DD hh:mm:ss');
 					console.log(user);
 					this.addRegisterItem(user);
+
+					result.user.sendEmailVerification();
 				}
 			})
 			.catch((error) => {
@@ -38,9 +39,21 @@ export class RegistrationService {
 			});
 	}
 
-	private addRegisterItem(user: UserRegisterModel) {
+	private addRegisterItem(reg: UserRegisterModel) {
+		let user: Users = new Users();
+
+		user.createdAt = reg.createdAt;
+		user.dob = reg.dob;
+		user.email = reg.email;
+		user.gender = reg.gender;
+		user.lastName = reg.lastName;
+		user.name = reg.name;
+		user.password = reg.password;
+		user.provider = reg.provider;
+		user.uuid = reg.uuid;
+
 		try {
-			this.usersCollection.add(user);
+			this.userService.createUser(user);
 		} catch (error) {
 			console.error(error);
 		}

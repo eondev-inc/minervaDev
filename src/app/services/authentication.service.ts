@@ -27,9 +27,15 @@ export class AuthenticationService {
 			this.fireAuth
 				.signInWithEmailAndPassword(user.username, user.password)
 				.then(async (result) => {
-					this.token = await result.user.getIdToken();
-					this.saveAuthToken();
-					resolve(true);
+					let verified = await result.user.emailVerified;
+
+					if (verified) {
+						this.token = await result.user.getIdToken();
+						this.saveAuthToken();
+						resolve(true);
+					} else {
+						reject(false);
+					}
 				})
 				.catch((error) => {
 					/**
@@ -39,7 +45,7 @@ export class AuthenticationService {
 					 * para corrección de bugs o seguimiento
 					 */
 					resolve(false);
-					console.error(error);
+					console.error(this.TAG, error.message);
 				});
 		});
 	}

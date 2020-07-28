@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { UsersService } from './users.service';
 
 interface ErrorHandling {
 	[s: string]: boolean;
@@ -9,7 +10,7 @@ interface ErrorHandling {
 	providedIn: 'root',
 })
 export class ValidatorsService {
-	constructor() {}
+	constructor(public userService: UsersService) {}
 
 	checkPasswords(pass1: string, pass2: string) {
 		return (formGroup: FormGroup) => {
@@ -28,15 +29,18 @@ export class ValidatorsService {
 		if (!control.value) {
 			return Promise.resolve(null);
 		}
-
-		return new Promise((resolve, reject) => {
-			setTimeout(() => {
-				if (control.value === 'yromero@izit.cl') {
-					resolve({ existe: true });
+		this.userService
+			.getUserByEmail(control.value)
+			.then((res) => {
+				if (res.exists) {
+					return Promise.resolve({ existe: true });
 				} else {
-					resolve(null);
+					return Promise.resolve({ existe: false });
 				}
-			}, 3500);
-		});
+			})
+			.catch((error) => {
+				console.log(error);
+				return Promise.resolve(null);
+			});
 	}
 }
