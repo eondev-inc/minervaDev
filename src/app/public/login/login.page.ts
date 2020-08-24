@@ -11,6 +11,7 @@ import { LoadingController, AlertController } from '@ionic/angular';
 	styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+	private TAG: string = 'LoginPageComponent';
 	logo: string = '../../assets/img/minerva_login.png';
 	user: UserLoginModel;
 	invalid: boolean;
@@ -72,17 +73,49 @@ export class LoginPage implements OnInit {
 			});
 	}
 
-	onLoginFacebook() {
+	// onLoginFacebook() {
+	// 	try {
+	// 		this.auth.userLoginFacebook();
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// }
+
+	async onLoginTwitter() {
 		try {
-			this.auth.userLoginFacebook();
-		} catch (error) {
-			console.log(error);
-		}
+			const loading = await this.loadingController.create({
+				message: 'Loading...',
+				spinner: 'bubbles',
+			});
+
+			await loading.present();
+			await this.auth.userLoginTwitter();
+			await loading.dismiss();
+			this.route.navigateByUrl('/dashboard');
+		} catch (error) {}
 	}
 
-	onLoginTwitter() {
+	/**
+	 * Metodo para la autenticacion contra Google y Firebase
+	 */
+	async onLoginGoogle() {
 		try {
-			this.auth.userLoginTwitter();
-		} catch (error) {}
+			const loading = await this.loadingController.create({
+				message: 'Loading...',
+				spinner: 'bubbles',
+			});
+			await loading.present();
+			await this.auth.userLoginGoogle();
+			await loading.dismiss();
+
+			this.route.navigateByUrl('/dashboard');
+		} catch (error) {
+			/**
+			 * TODO:
+			 * 1. Hay que desarrollar una clase que contenga los errores en la aplicacion
+			 * y los envie a una cola o a una base de datos asincrona
+			 */
+			console.error(this.TAG + ' - ' + error.message);
+		}
 	}
 }

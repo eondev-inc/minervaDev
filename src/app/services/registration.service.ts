@@ -12,31 +12,36 @@ import { Users } from '../models/users.model';
 export class RegistrationService {
 	constructor(private fireAuth: AngularFireAuth, private userService: UsersService) {}
 
-	public registerUserWithCredentials(user: UserRegisterModel) {
-		this.fireAuth
-			.createUserWithEmailAndPassword(user.email, user.password)
-			.then((result) => {
-				//Invocar al servicio de registro de base de datos para crear el nuevo
-				//Usuario
-				if (result) {
-					user.provider = result.user.providerId;
-					user.uuid = result.user.uid;
-					user.createdAt = moment(new Date()).format('YYYY-MM-DD hh:mm:ss');
-					console.log(user);
-					this.addRegisterItem(user);
+	public async registerUserWithCredentials(user: UserRegisterModel): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			this.fireAuth
+				.createUserWithEmailAndPassword(user.email, user.password)
+				.then((result) => {
+					//Invocar al servicio de registro de base de datos para crear el nuevo
+					//Usuario
+					if (result !== null) {
+						user.provider = result.user.providerId;
+						user.uuid = result.user.uid;
+						user.createdAt = moment(new Date()).format('YYYY-MM-DD hh:mm:ss');
+						console.log(user);
+						this.addRegisterItem(user);
 
-					result.user.sendEmailVerification();
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-				//Se infieren varios errores, el usuario ya existe o
-				//imposibilidad de conectarse con el servicio
-
-				//En caso de que el usuario ya exista
-
-				//En caso de error en la conexión
-			});
+						result.user.sendEmailVerification();
+						//El usuario fue creado y el mensaje de validacion de correos fue enviado
+						resolve(true);
+					}
+				})
+				.catch((error) => {
+					/**
+					 * TODO:
+					 * 1. Se necesitan manejar los errores
+					 */
+					console.error(error);
+					//Se infieren varios errores, el usuario ya existe o
+					//imposibilidad de conectarse con el servicio
+					reject(error);
+				});
+		});
 	}
 
 	private addRegisterItem(reg: UserRegisterModel) {
@@ -45,10 +50,11 @@ export class RegistrationService {
 		user.createdAt = reg.createdAt;
 		user.dob = reg.dob;
 		user.email = reg.email;
+		user.emailverified = false;
 		user.gender = reg.gender;
 		user.lastName = reg.lastName;
 		user.name = reg.name;
-		user.password = reg.password;
+		user.password = reg.password; //Pendiente que el Password hay que actualizarlo cuando lo quieran recuperar
 		user.provider = reg.provider;
 		user.uuid = reg.uuid;
 

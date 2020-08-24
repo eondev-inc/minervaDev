@@ -4,6 +4,7 @@ import * as moment from 'moment-timezone';
 import { ValidatorsService } from 'src/app/services/validators.service';
 import { RegistrationService } from 'src/app/services/registration.service';
 import { UserRegisterModel } from 'src/app/models/user.register.model';
+import { LoadingController, AlertController } from '@ionic/angular';
 
 @Component({
 	selector: 'app-register',
@@ -15,7 +16,15 @@ export class RegisterPage implements OnInit {
 	defaultDate: string = moment(new Date()).format('YYYY-MM-DD');
 	isSubmitted: boolean = false;
 	checkingEmail: boolean;
-	constructor(public fb: FormBuilder, private valids: ValidatorsService, private regService: RegistrationService) {}
+	alertLoading: any;
+	dialog: any;
+	constructor(
+		public fb: FormBuilder,
+		private valids: ValidatorsService,
+		private regService: RegistrationService,
+		public loadingController: LoadingController,
+		private alertController: AlertController
+	) {}
 
 	ngOnInit() {
 		this.buildFormGroup();
@@ -89,7 +98,7 @@ export class RegisterPage implements OnInit {
 		this.sendFormAndRegister(this.registerForm.value);
 	}
 
-	private sendFormAndRegister(values: UserRegisterModel) {
+	private async sendFormAndRegister(values: UserRegisterModel) {
 		let registerUser: UserRegisterModel = {
 			name: values.name,
 			lastName: values.lastName,
@@ -100,9 +109,22 @@ export class RegisterPage implements OnInit {
 		};
 
 		try {
-			this.regService.registerUserWithCredentials(registerUser);
+			await this.showDialog();
+
+			let register: boolean = await this.regService.registerUserWithCredentials(registerUser);
+
+			if (register) {
+				//Si el usuario se ha registrado
+				await this.dismissDialog(this.dialog);
+
+				await this.showAlertDialog('Hemos enviado un correo para validar el e-mail proporcionado');
+			} else {
+				await this.showAlertDialog('Tenemos problemas para registrate, por favor vuelva a intentar', 'Error!');
+			}
 		} catch (error) {
+			await this.dismissDialog(this.dialog);
 			console.error(error);
+			await this.showAlertDialog(error.message, 'Error Fatal!');
 		}
 	}
 
@@ -140,5 +162,27 @@ export class RegisterPage implements OnInit {
 				console.log(this.checkingEmail);
 			}
 		});
+	}
+
+	private async showAlertDialog(message: string, title?: string) {
+		this.alertLoading = await this.alertController.create({
+			header: title ? title : 'Alerta!',
+			message: message,
+			buttons: ['OK'],
+		});
+
+		await this.alertLoading.present();
+	}
+
+	private async showDialog() {
+		this.dialog = await this.loadingController.create({
+			message: 'Loading...',
+			spinner: 'bubbles',
+		});
+		await this.dialog.present();
+	}
+
+	private async dismissDialog(dialog: LoadingController) {
+		await dialog.dismiss();
 	}
 }

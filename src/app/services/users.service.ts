@@ -20,7 +20,7 @@ export class UsersService {
 	 * @param user
 	 */
 	public createUser(user: Users) {
-		this.usersRef.doc(user.email).set({ ...user });
+		this.usersRef.doc(user.uuid).set({ ...user });
 	}
 
 	/**
