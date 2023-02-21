@@ -55,7 +55,7 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
     "os": "^0.1.1",
-    "protractor": "~5.4.3",
+    "protractor": "~5.4.4",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~3.8.3"
