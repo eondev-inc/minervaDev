@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { UserLoginModel } from '../models/user.login.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Storage } from '@ionic/storage';
-import { auth } from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { BehaviorSubject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 
@@ -70,7 +71,7 @@ export class AuthenticationService {
 
 	public userLoginFacebook() {
 		try {
-			let provider = new auth.FacebookAuthProvider();
+			let provider = new firebase.auth.FacebookAuthProvider();
 			provider.addScope('email');
 			provider.addScope('user_birthday');
 			provider.addScope('user_gender');
@@ -87,8 +88,8 @@ export class AuthenticationService {
 	 */
 	public userLoginTwitter() {
 		try {
-			let provider = new auth.TwitterAuthProvider();
-			auth().useDeviceLanguage();
+			let provider = new firebase.auth.TwitterAuthProvider();
+			firebase.auth().useDeviceLanguage();
 
 			this.fireAuth.signInWithPopup(provider).then((result) => {
 				console.log(JSON.stringify(result.credential) + ' ' + JSON.stringify(result.user));

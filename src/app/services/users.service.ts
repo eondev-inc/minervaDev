@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 import { Users } from '../models/users.model';
 import { UserRegisterModel } from '../models/user.register.model';
-import { User } from 'firebase';
+import firebase from 'firebase/app';
 
 @Injectable({
 	providedIn: 'root',
@@ -10,7 +10,7 @@ import { User } from 'firebase';
 export class UsersService {
 	private dbPath: string = '/users';
 	usersRef: AngularFirestoreCollection<Users> = null;
-	user: User;
+	user: firebase.User;
 	constructor(private db: AngularFirestore) {
 		this.usersRef = db.collection(this.dbPath);
 	}

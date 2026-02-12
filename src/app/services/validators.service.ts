@@ -29,18 +29,18 @@ export class ValidatorsService {
 		if (!control.value) {
 			return Promise.resolve(null);
 		}
-		this.userService
+		return this.userService
 			.getUserByEmail(control.value)
 			.then((res) => {
 				if (res.exists) {
-					return Promise.resolve({ existe: true });
+					return { existe: true };
 				} else {
-					return Promise.resolve({ existe: false });
+					return { existe: false };
 				}
 			})
 			.catch((error) => {
 				console.log(error);
-				return Promise.resolve(null);
+				return null;
 			});
 	}
 }
