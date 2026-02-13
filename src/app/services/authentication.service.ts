@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { UserLoginModel } from '../models/user.login.model';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Storage } from '@ionic/storage';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 import { BehaviorSubject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 

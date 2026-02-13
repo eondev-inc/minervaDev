@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/compat/firestore';
 import { Users } from '../models/users.model';
 import { UserRegisterModel } from '../models/user.register.model';
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 
 @Injectable({
 	providedIn: 'root',
