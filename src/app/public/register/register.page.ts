@@ -6,6 +6,7 @@ import { RegistrationService } from 'src/app/services/registration.service';
 import { UserRegisterModel } from 'src/app/models/user.register.model';
 
 @Component({
+	standalone: false,
 	selector: 'app-register',
 	templateUrl: './register.page.html',
 	styleUrls: ['./register.page.scss'],

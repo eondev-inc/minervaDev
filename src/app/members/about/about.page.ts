@@ -3,6 +3,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
+	standalone: false,
 	selector: 'app-about',
 	templateUrl: './about.page.html',
 	styleUrls: ['./about.page.scss'],
