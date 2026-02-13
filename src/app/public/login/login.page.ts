@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { LoadingController, AlertController } from '@ionic/angular';
 
 @Component({
+	standalone: false,
 	selector: 'app-login',
 	templateUrl: './login.page.html',
 	styleUrls: ['./login.page.scss'],

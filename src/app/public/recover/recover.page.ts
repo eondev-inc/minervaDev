@@ -6,6 +6,7 @@ import { UserRecoveryModel } from 'src/app/models/user.recovery.model';
 import { LoadingController, AlertController } from '@ionic/angular';
 
 @Component({
+	standalone: false,
 	selector: 'app-recover',
 	templateUrl: './recover.page.html',
 	styleUrls: ['./recover.page.scss'],
