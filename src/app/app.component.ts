@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-import { Plugins } from '@capacitor/core';
-
-const { SplashScreen, StatusBar } = Plugins;
+import { SplashScreen } from '@capacitor/splash-screen';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +18,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      StatusBar.setStyle({ style: 'DEFAULT' as any });
+      StatusBar.setStyle({ style: Style.Default });
       SplashScreen.hide();
     });
   }
